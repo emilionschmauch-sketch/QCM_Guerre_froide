@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>QCM Guerre Froide</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        margin: 0;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+    }
+    .quiz-container {
+        max-width: 800px;
+        margin: auto;
+        background: rgba(255,255,255,0.1);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    .question {
+        margin-bottom: 20px;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .correct {
+        background-color: rgba(0, 255, 0, 0.2);
+    }
+    .incorrect {
+        background-color: rgba(255, 0, 0, 0.2);
+    }
+    button {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        font-size: 18px;
+        border: none;
+        border-radius: 10px;
+        background: #00c6ff;
+        color: white;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #0072ff;
+    }
+    .result {
+        text-align: center;
+        font-size: 22px;
+        margin-top: 20px;
+    }
+    .explanation {
+        font-size: 14px;
+        margin-top: 5px;
+        opacity: 0.9;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>QCM : Guerre Froide</h1>
+
+<div class="quiz-container" id="quiz"></div>
+
+<button onclick="corriger()">Corriger</button>
+
+<div class="result" id="result"></div>
+
+<script>
+const questions = [
+{
+q: "1. Quelles mesures appartiennent à la doctrine Truman ?",
+a: ["Plan Marshall", "OTAN", "Pacte de Varsovie"],
+correct: [0,1],
+exp: "La doctrine Truman vise à contenir le communisme avec aides économiques et alliances militaires."
+},
+{
+q: "2. Quelles actions sont liées à la doctrine Jdanov ?",
+a: ["COMECON", "Pacte de Varsovie", "Plan Marshall"],
+correct: [0,1],
+exp: "L’URSS met en place ses propres alliances pour contrer le capitalisme."
+},
+{
+q: "3. Le modèle politique américain inclut :",
+a: ["Multipartisme", "Libertés individuelles", "Parti unique"],
+correct: [0,1],
+exp: "Les USA sont une démocratie libérale."
+},
+{
+q: "4. Le modèle soviétique comprend :",
+a: ["Parti unique", "Censure", "Liberté totale"],
+correct: [0,1],
+exp: "Le régime soviétique limite fortement les libertés."
+},
+{
+q: "5. Le maccarthysme correspond à :",
+a: ["Une chasse aux communistes", "Une réforme sociale", "Une politique militaire"],
+correct: [0],
+exp: "C’est une période de suspicion anti-communiste aux USA."
+},
+{
+q: "6. Quels éléments caractérisent l’économie américaine ?",
+a: ["Propriété privée", "Liberté d’entreprendre", "Planification"],
+correct: [0,1],
+exp: "Les USA sont capitalistes."
+},
+{
+q: "7. L’économie soviétique repose sur :",
+a: ["Plans quinquennaux", "Collectivisation", "Libre marché"],
+correct: [0,1],
+exp: "L’économie est dirigée par l’État."
+},
+{
+q: "8. Le American Way of Life comprend :",
+a: ["Consommation", "Centres commerciaux", "Propagande communiste"],
+correct: [0,1],
+exp: "C’est un modèle basé sur la consommation."
+},
+{
+q: "9. La Nomenklatura est :",
+a: ["Une élite privilégiée", "Un groupe d’ouvriers", "Une armée"],
+correct: [0],
+exp: "Elle bénéficie d’avantages dans le système soviétique."
+},
+{
+q: "10. La déstalinisation implique :",
+a: ["Fin du culte de Staline", "Critique des crimes", "Renforcement de la dictature"],
+correct: [0,1],
+exp: "Khrouchtchev assouplit le régime."
+},
+{
+q: "11. L’OTAN est :",
+a: ["Alliance militaire", "Organisation occidentale", "Alliance soviétique"],
+correct: [0,1],
+exp: "Organisation militaire de l’Ouest."
+},
+{
+q: "12. Le Pacte de Varsovie :",
+a: ["Alliance de l’Est", "Réponse à l’OTAN", "Organisation américaine"],
+correct: [0,1],
+exp: "Bloc militaire soviétique."
+},
+{
+q: "13. Le Plan Marshall :",
+a: ["Aide financière", "Reconstruit l’Europe", "Aide l’URSS"],
+correct: [0,1],
+exp: "Programme économique américain."
+},
+{
+q: "14. Le Goulag est :",
+a: ["Camp de travail", "Système répressif", "Lieu touristique"],
+correct: [0,1],
+exp: "Utilisé pour punir les opposants."
+},
+{
+q: "15. Les limites du modèle américain :",
+a: ["Inégalités", "Ségrégation raciale", "Absence de liberté"],
+correct: [0,1],
+exp: "Malgré ses libertés, des inégalités persistent."
+}
+];
+
+const quizDiv = document.getElementById("quiz");
+
+questions.forEach((q, index) => {
+    const div = document.createElement("div");
+    div.classList.add("question");
+
+    div.innerHTML = `<p>${q.q}</p>` + 
+    q.a.map((choice, i) =>
+        `<label><input type="checkbox" name="q${index}" value="${i}"> ${choice}</label><br>`
+    ).join("") +
+    `<div class="explanation" id="exp${index}"></div>`;
+
+    quizDiv.appendChild(div);
+});
+
+function corriger() {
+    let score = 0;
+
+    questions.forEach((q, index) => {
+        const checkboxes = document.querySelectorAll(`input[name="q${index}"]`);
+        let selected = [];
+
+        checkboxes.forEach(cb => {
+            if(cb.checked) selected.push(parseInt(cb.value));
+        });
+
+        let correct = q.correct.sort().toString() === selected.sort().toString();
+        let questionDiv = checkboxes[0].closest(".question");
+
+        if(correct){
+            score++;
+            questionDiv.classList.add("correct");
+        } else {
+            questionDiv.classList.add("incorrect");
+        }
+
+        document.getElementById("exp"+index).innerHTML = 
+            "✔ Réponse(s) correcte(s) : " + q.correct.map(i => q.a[i]).join(", ") +
+            "<br>💡 " + q.exp;
+    });
+
+    let message = "";
+    if(score <= 5) message = "😅 Revois ton cours !";
+    else if(score <= 10) message = "👍 Pas mal du tout !";
+    else message = "🔥 Excellent travail !";
+
+    document.getElementById("result").innerHTML = 
+        "Score : " + score + " / " + questions.length + "<br>" + message;
+}
+</script>
+
+</body>
+</html>
