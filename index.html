@@ -63,7 +63,8 @@
 <body>
 
 <h1>QCM : Guerre Froide</h1>
-    <h3 style="text-align:center; color:black;">Réalisé par Emilion Schmauch</h3>
+<h3 style="text-align:center; color:black;">Réalisé par Emilion Schmauch</h3>
+<button onclick="initialisation()">Recommencer le QCM</button>
 
 <div class="quiz-container" id="quiz"></div>
 
@@ -74,7 +75,7 @@
 <script>
 const questions = [
 {
-q: "1. Quelles mesures appartiennent à la doctrine Truman ?",
+q: "1. Quelle(s) mesure(s) appartiennent à la doctrine Truman ?",
 a: ["Plan Marshall", "OTAN", "Pacte de Varsovie"],
 correct: [0,1],
 exp: "La doctrine Truman vise à contenir le communisme avec aides économiques et alliances militaires."
@@ -213,6 +214,20 @@ function corriger() {
 
     document.getElementById("result").innerHTML = 
         "Score : " + score + " / " + questions.length + "<br>" + message;
+}
+function initialisation (){
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    checkboxes.forEach(cb => cb.checked = false);
+    
+    const questionDivs = document.querySelectorAll(".question");
+    questionDivs.forEach(div => {
+        div.classList.remove("correct", "incorrect");
+    });
+    
+    const explanations = document.querySelectorAll(".explanation");
+    explanations.forEach(exp => exp.innerHTML = "");
+    
+    document.getElementById("result").innerHTML = "";
 }
 </script>
 
